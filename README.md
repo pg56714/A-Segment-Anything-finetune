@@ -8,12 +8,6 @@ conda activate anyshadow
 pip install -r requirements.txt
 ```
 
-Incremental Learning
-
-```bash
-python sam_finetune_Incremental_Learning.py
-```
-
 Fine-tune
 
 ```bash
