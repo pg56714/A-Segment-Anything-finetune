@@ -1,13 +1,13 @@
 import json
 import os
 import cv2
-from skimage import measure, color
+from skimage import measure
 import numpy as np
 from tqdm import tqdm
 
 
 def main():
-    path = "/data/wangyh/data4/Datasets/shadow/video_new/visha2/test"
+    path = "./data/train"
     videolists = sorted(os.listdir(os.path.join(path, "labels")))
 
     # get label path
@@ -97,7 +97,7 @@ def main():
                 meta[video][video_file]["shadow_num"] = len(valid_label)
 
     b = json.dumps(meta, indent=4)
-    f2 = open("sam_test.json", "w")
+    f2 = open("sam_train.json", "w")
     f2.write(b)
     f2.close()
     # print()
