@@ -27,8 +27,10 @@ def draw_annotations(image_path, annotations, save_dir):
 
 
 def main():
+    print("Current Working Directory: ", os.getcwd())
+
     # 載入 JSON 檔案
-    with open("./data/sam_test.json", "r") as file:
+    with open("../datasets/sam_train.json", "r") as file:
         data = json.load(file)
         print(f"Total keys in JSON: {len(data.keys())}")
 
@@ -43,7 +45,9 @@ def main():
 
         # 使用 tqdm 顯示進度條
         for image_file, annotations in data[main_key].items():
-            image_path = os.path.abspath(f"./data/test/labels/{main_key}/{image_file}")
+            image_path = os.path.abspath(
+                f"../datasets/train/labels/{main_key}/{image_file}"
+            )
             if os.path.exists(image_path):
                 draw_annotations(image_path, annotations, save_dir)
             else:

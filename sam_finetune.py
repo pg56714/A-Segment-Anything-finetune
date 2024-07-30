@@ -29,7 +29,7 @@ def main():
     sam_checkpoint = "./checkpoints/sam_vit_b_01ec64.pth"
     model_type = "vit_b"
     device = "cuda"
-    training_path = "./train"
+    training_path = "./datasets/train"
     sam_model = sam_model_registry[model_type](checkpoint=sam_checkpoint)
     sam_model.to(device=device)
     sam_model.train()
@@ -48,7 +48,7 @@ def main():
     loss_fn = torch.nn.BCEWithLogitsLoss()
 
     # load bounding boxes
-    with open("./dataset/sam_train.json", "r") as f:
+    with open("./datasets/sam_train.json", "r") as f:
         meta = json.load(f)
 
     # get the training files

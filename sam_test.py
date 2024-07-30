@@ -27,12 +27,12 @@ def main():
     sam_checkpoint = "./checkpoints/9.pth"
     model_type = "vit_b"
     device = "cuda"
-    path = "./test"
+    path = "./datasets/test"
     sam_model = sam_model_registry[model_type](checkpoint=sam_checkpoint)
     sam_model.to(device=device)
     sam_model.eval()
 
-    f = open("./dataset/sam_test.json", "r")
+    f = open("./datasets/sam_test.json", "r")
     content = f.read()
     meta = json.loads(content)
 
