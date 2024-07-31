@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ## Datasets Steps
 
-1. Download from the [ViSha Dataset Source Link](https://erasernut.github.io/ViSha.html) and place the files inside the `datasets` folder.
+1. Download from the [ViSha Dataset Source Link](https://erasernut.github.io/ViSha.html) or [SOBA_v2-Datasets](https://drive.google.com/drive/folders/1MKxyq3R6AUeyLai9i9XWzG2C_n5f0ppP) and place the files inside the `datasets` folder.
 
 2. Run the `save_json.py` script in the `tool` folder to create `sam_train.json` and `sam_test.json` and place them inside the `datasets` folder.
 
@@ -45,3 +45,7 @@ python demo_app.py
 [learn-how-to-fine-tune-the-segment-anything-model-sam](https://encord.com/blog/learn-how-to-fine-tune-the-segment-anything-model-sam/)
 
 [fine-tune-the-segment-anything-model-sam-colab](https://colab.research.google.com/drive/1F6uRommb3GswcRlPZWpkAQRMVNdVH7Ww?usp=sharing#scrollTo=WRQ6yd_PM_B9)
+
+[SOBA_v2-Datasets](https://drive.google.com/drive/folders/1MKxyq3R6AUeyLai9i9XWzG2C_n5f0ppP)
+
+[SSIS](https://github.com/stevewongv/SSIS)
