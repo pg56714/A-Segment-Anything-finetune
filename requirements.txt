@@ -1,8 +1,6 @@
 opencv-python
 tqdm
-numpy==1.26.4
-torch --find-links https://download.pytorch.org/whl/cu118
-torchvision --find-links https://download.pytorch.org/whl/cu118
-torchaudio --find-links https://download.pytorch.org/whl/cu118
+numpy
 scikit-image
 gradio
+scikit-learn

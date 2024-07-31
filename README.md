@@ -7,6 +7,8 @@ conda create --name anyshadow python=3.10 -y
 
 conda activate anyshadow
 
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
 pip install -r requirements.txt
 ```
 
