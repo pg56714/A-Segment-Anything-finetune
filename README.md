@@ -3,9 +3,9 @@
 ## Getting Started
 
 ```bash
-conda create --name anyobjectshadow python=3.10 -y
+conda create --name sam-finetune python=3.10 -y
 
-conda activate anyobjectshadow
+conda activate sam-finetune
 
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
