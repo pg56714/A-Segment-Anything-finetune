@@ -1,11 +1,11 @@
-# Segment-Anything-finetune-shadow
+# Segment-Anything-finetune
 
 ## Getting Started
 
 ```bash
-conda create --name anyshadow python=3.10 -y
+conda create --name anyobjectshadow python=3.10 -y
 
-conda activate anyshadow
+conda activate anyobjectshadow
 
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 

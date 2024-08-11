@@ -15,14 +15,20 @@ from sam import sam_model_registry
 from sam.utils.transforms import ResizeLongestSide
 
 
+# def get_training_files(path):
+#     imageists = sorted(os.listdir(os.path.join(path, "images")))
+#     img_all = []
+#     for image in imageists:
+#         i_path = os.path.join(path, "images", image)
+#         imglist = sorted(os.listdir(i_path))
+#         img_all = img_all + [os.path.join(i_path, img) for img in imglist]
+#     return img_all
+
+
 def get_training_files(path):
-    videolists = sorted(os.listdir(os.path.join(path, "images")))
-    img_all = []
-    for video in videolists:
-        v_path = os.path.join(path, "images", video)
-        imglist = sorted(os.listdir(v_path))  # all frames of current video
-        img_all = img_all + [os.path.join(v_path, img) for img in imglist]
-    return img_all  # a list of all image paths
+    image_dir = os.path.join(path, "images")
+    img_all = [os.path.join(image_dir, img) for img in sorted(os.listdir(image_dir))]
+    return img_all
 
 
 def main():
@@ -39,7 +45,6 @@ def main():
         )
     )
 
-    # set the optimizer and loss
     lr = 1e-4
     optimizer = torch.optim.Adam(
         sam_model.mask_decoder.parameters(), lr=lr, weight_decay=0
@@ -47,7 +52,6 @@ def main():
     # loss_fn = torch.nn.MSELoss()
     loss_fn = torch.nn.BCEWithLogitsLoss()
 
-    # load bounding boxes
     with open("./datasets/sam_train.json", "r") as f:
         meta = json.load(f)
 
@@ -55,7 +59,7 @@ def main():
     img_all = get_training_files(training_path)
 
     # start training!!!
-    num_epochs = 10
+    num_epochs = 200
     for epoch in range(num_epochs):
         epoch_losses = []
         random.shuffle(img_all)  # random shuffle the training files
@@ -71,8 +75,8 @@ def main():
             label = cv2.cvtColor(label, cv2.COLOR_BGR2GRAY)
 
             # transform
-            sam_trans = ResizeLongestSide(sam_model.image_encoder.img_size)  # 1024
-            resize_image = sam_trans.apply_image(image)  # padding to 1024 * 1024
+            sam_trans = ResizeLongestSide(sam_model.image_encoder.img_size) # 1024
+            resize_image = sam_trans.apply_image(image)
             image_tensor = torch.as_tensor(resize_image, device=device)
             input_image_torch = image_tensor.permute(2, 0, 1).contiguous()[
                 None, :, :, :
@@ -82,31 +86,16 @@ def main():
             original_image_size = image.shape[:2]
             input_size = tuple(input_image_torch.shape[-2:])
 
-            # video_name = img_path.split("/")[-2]
-            # file_name = img_path.split("/")[-1].replace("jpg", "png")
-
-            video_name = os.path.basename(os.path.dirname(img_path))
             file_name = os.path.basename(img_path).replace("jpg", "png")
 
-            # # Debugging print statements
-            # print(f"Processing video: {video_name}, file: {file_name}")
-
-            # if video_name not in meta:
-            #     print(f"Video {video_name} not found in metadata")
-            #     continue
-
-            # if file_name not in meta[video_name]:
-            #     print(f"File {file_name} not found in metadata for video {video_name}")
-            #     continue
-
-            bboxes = meta[video_name][file_name]["bbox"]
+            bboxes = meta[file_name]["bbox"]
             bboxes = np.array(bboxes)
 
             with torch.no_grad():
                 box = sam_trans.apply_boxes(bboxes, (original_image_size))
                 box_torch = torch.as_tensor(box, dtype=torch.float, device=device)
                 if len(box_torch.shape) == 2:
-                    box_torch = box_torch[:, None, :]  # (B, 1, 4)
+                    box_torch = box_torch[:, None, :]
 
                 image_embedding = sam_model.image_encoder(input_image)
                 sparse_embeddings, dense_embeddings = sam_model.prompt_encoder(

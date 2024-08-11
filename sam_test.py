@@ -13,18 +13,24 @@ from sam import sam_model_registry
 from sam.utils.transforms import ResizeLongestSide
 
 
+# def get_training_files(path):
+#     imageists = sorted(os.listdir(os.path.join(path, "images")))
+#     img_all = []
+#     for image in imageists:
+#         i_path = os.path.join(path, "images", image)
+#         imglist = sorted(os.listdir(i_path))
+#         img_all = img_all + [os.path.join(i_path, img) for img in imglist]
+#     return img_all
+
+
 def get_training_files(path):
-    videolists = sorted(os.listdir(os.path.join(path, "images")))
-    img_all = []
-    for video in videolists:
-        v_path = os.path.join(path, "images", video)
-        imglist = sorted(os.listdir(v_path))  # all frames of current video
-        img_all = img_all + [os.path.join(v_path, img) for img in imglist]
-    return img_all  # a list of all image paths
+    image_dir = os.path.join(path, "images")
+    img_all = [os.path.join(image_dir, img) for img in sorted(os.listdir(image_dir))]
+    return img_all
 
 
 def main():
-    sam_checkpoint = "./checkpoints/9.pth"
+    sam_checkpoint = "./checkpoints/old/200_0202.pth"
     model_type = "vit_b"
     device = "cuda"
     path = "./datasets/test"
@@ -32,9 +38,8 @@ def main():
     sam_model.to(device=device)
     sam_model.eval()
 
-    f = open("./datasets/sam_test.json", "r")
-    content = f.read()
-    meta = json.loads(content)
+    with open("./datasets/sam_test.json", "r") as f:
+        meta = json.load(f)
 
     img_all = get_training_files(path)
 
@@ -43,12 +48,10 @@ def main():
     for i, img_path in enumerate(img_all_pbar):
         image = cv2.imread(img_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        # label = cv2.imread(lab_all[i])
-        # label = cv2.cvtColor(label, cv2.COLOR_BGR2GRAY)
 
         # transform
         sam_trans = ResizeLongestSide(sam_model.image_encoder.img_size)  # 1024
-        resize_image = sam_trans.apply_image(image)  # 等比例填充到一边为1024
+        resize_image = sam_trans.apply_image(image)
         image_tensor = torch.as_tensor(resize_image, device=device)
         input_image_torch = image_tensor.permute(2, 0, 1).contiguous()[None, :, :, :]
 
@@ -56,20 +59,17 @@ def main():
         original_image_size = image.shape[:2]
         input_size = tuple(input_image_torch.shape[-2:])
 
-        # video_name = img_path.split("/")[-2]
-        # file_name = img_path.split("/")[-1].replace("jpg", "png")
-
-        video_name = os.path.basename(os.path.dirname(img_path))
         file_name = os.path.basename(img_path).replace("jpg", "png")
-        bboxes = meta[video_name][file_name]["bbox"]
+
+        bboxes = meta[file_name]["bbox"]
         bboxes = np.array(bboxes)
 
         with torch.no_grad():
             box = sam_trans.apply_boxes(bboxes, (original_image_size))
             box_torch = torch.as_tensor(box, dtype=torch.float, device=device)
             if len(box_torch.shape) == 2:
-                box_torch = box_torch[:, None, :]  # (B, 1, 4)
-
+                box_torch = box_torch[:, None, :]
+                
             image_embedding = sam_model.image_encoder(input_image)
             sparse_embeddings, dense_embeddings = sam_model.prompt_encoder(
                 points=None,
@@ -92,9 +92,6 @@ def main():
 
         mask_save = (upscaled_masks > 0.5)[0].detach().squeeze(0).cpu().numpy()
         mask_save = np.array(mask_save * 255).astype(np.uint8)
-
-        # vi = img_path.split("/")[-2]
-        # fi = img_path.split("/")[-1].split(".")[-2] + ".png"
 
         vi = os.path.basename(os.path.dirname(img_path))
         fi = os.path.splitext(os.path.basename(img_path))[0] + ".png"
