@@ -6,7 +6,6 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
     f1_score,
-    jaccard_score,
 )
 from tqdm import tqdm
 
@@ -56,7 +55,6 @@ def main():
         precision_scores,
         recall_scores,
         f1_scores,
-        # jaccard_scores,
         # dsc_scores,
         iou_scores,
     ) = (
@@ -91,7 +89,6 @@ def main():
         # dsc = calculate_dsc(pred_mask, true_mask)
         # dsc_scores.append(dsc)
 
-        # accuracy, precision, recall, f1, jaccard, iou = evaluate_masks(
         accuracy, precision, recall, f1, iou = evaluate_masks(true_mask, pred_mask)
 
         accuracy_scores.append(accuracy)
@@ -106,7 +103,6 @@ def main():
     print(f"Average Precision: {np.mean(precision_scores):.4f}")
     print(f"Average Recall: {np.mean(recall_scores):.4f}")
     print(f"Average F1 Score: {np.mean(f1_scores):.4f}")
-    # print(f"Average Jaccard Index: {np.mean(jaccard_scores):.4f}")
     print(f"Average mIoU: {np.mean(iou_scores):.4f}")
     # print(f"Average DSC: {np.mean(dsc_scores):.4f}")
     # Dice Coefficient is the same as F1 Score for binary classification
