@@ -22,10 +22,24 @@ pip install -r requirements.txt
 
 You can use the `save_labels.py` script in the `tool` folder to verify the labels.
 
+Organized [SOBA_v2-Datasets](https://drive.google.com/drive/folders/1561wGAf0oik7C7__3byLHBNJOIadFuMw?usp=sharing) for use with the SAM model.
+
 ## Fine-tune
 
 ```bash
 python sam_finetune.py
+```
+
+## Test
+
+```bash
+python sam_test.py
+```
+
+## Eval
+
+```bash
+python sam_eval.py
 ```
 
 ## Demo
