@@ -24,6 +24,12 @@ You can use the `save_labels.py` script in the `tool` folder to verify the label
 
 Organized [SOBA_v2-Datasets](https://drive.google.com/drive/folders/1561wGAf0oik7C7__3byLHBNJOIadFuMw?usp=sharing) for use with the SAM model.
 
+### Weights
+
+Download the weights from the following links and save them in the `weights` directory.
+
+[ViT-B](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth)
+
 ## Fine-tune
 
 ```bash
@@ -49,6 +55,8 @@ python demo_app.py
 ```
 
 ## Source
+
+[segment-anything](https://github.com/facebookresearch/segment-anything)
 
 [Detect-AnyShadow](https://github.com/harrytea/Detect-AnyShadow)
 
