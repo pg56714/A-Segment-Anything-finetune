@@ -1,6 +1,5 @@
 opencv-python
 tqdm
-numpy
 scikit-image
 gradio
 scikit-learn
