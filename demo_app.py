@@ -60,8 +60,8 @@ def generate_mask_sam(frame):
     return thresholded_mask
 
 
-title = """<p><h1 align="center">AnyShadow</h1></p>"""
-description = """<p>Gradio demo for Shadow Detection<p>"""
+title = """<p><h1 align="center">Test Demo</h1></p>"""
+description = """<p>Test<p>"""
 
 with gr.Blocks() as demo:
     gr.Markdown(title)
