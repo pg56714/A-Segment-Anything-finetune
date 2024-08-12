@@ -11,7 +11,7 @@ sam_checkpoint = "./checkpoints/old/200_0202.pth"
 model_type = "vit_b"
 sam_model = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 
-device = "cuda"
+device = "cuda" if torch.cuda.is_available() else "cpu"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 sam_model.to(device=device)
 sam_model.eval()
