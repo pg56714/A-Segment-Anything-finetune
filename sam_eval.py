@@ -37,7 +37,7 @@ def evaluate_masks(true_mask, pred_mask):
     pred_flat = (pred_mask.flatten() / 255).astype(np.uint8)
 
     accuracy = accuracy_score(true_flat, pred_flat)
-    precision = precision_score(true_flat, pred_flat)
+    precision = precision_score(true_flat, pred_flat, zero_division=0)
     recall = recall_score(true_flat, pred_flat)
     f1 = f1_score(true_flat, pred_flat)
     # jaccard = jaccard_score(true_flat, pred_flat)

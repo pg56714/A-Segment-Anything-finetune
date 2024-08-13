@@ -10,8 +10,6 @@ def draw_annotations(image_path, annotations, save_dir):
         print(f"Image loading failed, check the path：{image_path}")
         return
 
-    # image = cv2.resize(image, (1024, 1024), interpolation=cv2.INTER_LINEAR)
-
     for bbox in annotations["bbox"]:
         x_min, y_min, x_max, y_max = bbox
         cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
@@ -25,8 +23,9 @@ def draw_annotations(image_path, annotations, save_dir):
 
 
 def main():
-    # with open("../datasets/sam_train.json", "r") as file:
-    with open("../datasets/sam_test.json", "r") as file:
+    with open("./sam_train.json", "r") as file:
+    # with open("./sam_test.json", "r") as file:
+    # with open("./sam_challenge.json", "r") as file:
         data = json.load(file)
         print(f"Total keys in JSON: {len(data.keys())}")
 
@@ -35,8 +34,9 @@ def main():
         os.makedirs(base_save_dir)
 
     for image_file, annotations in tqdm(data.items(), desc="Processing images"):
-        # image_path = os.path.abspath(f"../datasets/train/labels/{image_file}")
-        image_path = os.path.abspath(f"../datasets/test/labels/{image_file}")
+        image_path = os.path.abspath(f"./data_only_full_mask/train/labels/{image_file}")
+        # image_path = os.path.abspath(f"./data_only_full_mask/test/labels/{image_file}")
+        # image_path = os.path.abspath(f"./data_only_full_mask/challenge/labels/{image_file}")
         if os.path.exists(image_path):
             draw_annotations(image_path, annotations, base_save_dir)
         else:
